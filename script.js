@@ -41,12 +41,12 @@ function loadEmployees() {
   employees.forEach((emp, index) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>{emp.name}</td>
-      <td>{emp.tc}</td>
-      <td>{emp.date}</td>
-      <td>{emp.next}</td>
-      <td><button onclick="editEmployee({${index}})">Düzenle</button></td>
-      <td><button onclick="deleteEmployee({${index}})">Sil</button></td>
+      <td>${emp.name}</td>
+      <td>${emp.tc}</td>
+      <td>${emp.date}</td>
+      <td>${emp.next}</td>
+      <td><button onclick="editEmployee(${index})">Düzenle</button></td>
+      <td><button onclick="deleteEmployee(${index})">Sil</button></td>
     `;
     tbody.appendChild(tr);
   });
