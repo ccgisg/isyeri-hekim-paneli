@@ -2,40 +2,38 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>İşyeri Hekim Paneli V2 - IRIS</title>
-  <script src="script.js"></script>
+  <meta charset="UTF-8">
+  <title>İşyeri Hekim Paneli</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    h2 { margin-top: 30px; }
+    input, button, select { margin: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #999; padding: 5px; text-align: left; }
+  </style>
 </head>
 <body>
-  <h2>🔒 Giriş</h2>
-  <input type="password" id="password" placeholder="Şifre giriniz" />
+  <h2>🔐 Giriş</h2>
+  <input type="password" id="password" placeholder="Şifre girin">
   <button onclick="login()">Giriş Yap</button>
 
-  <div id="panel" style="display:none;">
-    <h3>🏢 İş Yerlerim</h3>
-    <ul id="workplaceList"></ul>
+  <div id="panel" style="display:none">
+    <h2>🏢 İş Yerlerim</h2>
+    <ul id="workplaces"></ul>
     <button onclick="addWorkplace()">+ Yeni İş Yeri Ekle</button>
 
-    <h3>👥 Çalışanlar</h3>
+    <h2>👥 Çalışanlar</h2>
     <button onclick="addEmployee()">+ Çalışan Ekle</button>
-    <table border="1" id="employeeTable">
-      <thead>
-        <tr>
-          <th>Ad Soyad</th>
-          <th>TC</th>
-          <th>Son Muayene</th>
-          <th>Sonraki Muayene</th>
-          <th>Düzenle</th>
-          <th>Sil</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
+    <table id="employeeTable">
+      <tr><th>Ad Soyad</th><th>TC</th><th>Son Muayene</th><th>Sonraki Muayene</th><th>Düzenle</th><th>Sil</th></tr>
     </table>
 
-    <h3>⚙️ Ayarlar</h3>
-    <input id="docName" placeholder="Doktor Ad Soyad" />
-    <input id="docDiploma" placeholder="Diploma No" />
-    <button onclick="saveDoctorInfo()">Kaydet</button>
+    <h2>⚙️ Ayarlar</h2>
+    <input type="text" id="doctorName" placeholder="Doktor Ad Soyad">
+    <input type="text" id="diplomaNo" placeholder="Diploma No">
+    <button onclick="saveSettings()">Kaydet</button>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
