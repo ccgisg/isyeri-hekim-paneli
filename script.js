@@ -1,82 +1,90 @@
 
 function login() {
-  const pw = document.getElementById("password").value;
-  if (pw === "hekim2025") {
+  const pass = document.getElementById("password").value;
+  if (pass === "1234") {
     document.getElementById("panel").style.display = "block";
-    loadEmployees();
   } else {
-    alert("Yanlış şifre");
+    alert("Şifre yanlış!");
   }
 }
 
+let selectedWorkplace = null;
+const workplaces = [];
+const employees = [];
+
 function addWorkplace() {
-  const name = prompt("İşyeri adı giriniz:");
+  const name = prompt("İş yeri adı:");
   if (name) {
-    const li = document.createElement("li");
-    li.innerText = name;
-    document.getElementById("workplaceList").appendChild(li);
+    workplaces.push(name);
+    renderWorkplaces();
   }
+}
+
+function renderWorkplaces() {
+  const ul = document.getElementById("workplaces");
+  ul.innerHTML = "";
+  workplaces.forEach((wp, i) => {
+    const li = document.createElement("li");
+    li.innerText = wp;
+    li.style.cursor = "pointer";
+    li.onclick = () => {
+      selectedWorkplace = wp;
+      renderEmployees();
+    };
+    ul.appendChild(li);
+  });
 }
 
 function addEmployee() {
   const name = prompt("Ad Soyad:");
   const tc = prompt("TC Kimlik No:");
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
   const next = new Date();
   next.setFullYear(next.getFullYear() + 5);
-  const nextDate = next.toISOString().split('T')[0];
+  const nextDate = next.toISOString().split("T")[0];
 
   if (name && tc) {
-    const employees = JSON.parse(localStorage.getItem("employees") || "[]");
-    employees.push({ name, tc, date: today, next: nextDate });
-    localStorage.setItem("employees", JSON.stringify(employees));
-    loadEmployees();
+    employees.push({ name, tc, lastCheck: today, nextCheck: nextDate });
+    renderEmployees();
   }
 }
 
-function loadEmployees() {
-  const employees = JSON.parse(localStorage.getItem("employees") || "[]");
-  const tbody = document.querySelector("#employeeTable tbody");
-  tbody.innerHTML = "";
-  employees.forEach((emp, index) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${emp.name}</td>
-      <td>${emp.tc}</td>
-      <td>${emp.date}</td>
-      <td>${emp.next}</td>
-      <td><button onclick="editEmployee(${index})">Düzenle</button></td>
-      <td><button onclick="deleteEmployee(${index})">Sil</button></td>
-    `;
-    tbody.appendChild(tr);
+function renderEmployees() {
+  const table = document.getElementById("employeeTable");
+  table.innerHTML = "<tr><th>Ad Soyad</th><th>TC</th><th>Son Muayene</th><th>Sonraki Muayene</th><th>Düzenle</th><th>Sil</th></tr>";
+  employees.forEach((emp, i) => {
+    const row = table.insertRow();
+    row.insertCell(0).innerText = emp.name;
+    row.insertCell(1).innerText = emp.tc;
+    row.insertCell(2).innerText = emp.lastCheck;
+    row.insertCell(3).innerText = emp.nextCheck;
+    row.insertCell(4).innerHTML = `<button onclick="editEmployee(${i})">Düzenle</button>`;
+    row.insertCell(5).innerHTML = `<button onclick="deleteEmployee(${i})">Sil</button>`;
   });
 }
 
-function editEmployee(index) {
-  const employees = JSON.parse(localStorage.getItem("employees") || "[]");
-  const emp = employees[index];
-  const name = prompt("Ad Soyad:", emp.name);
-  const tc = prompt("TC Kimlik No:", emp.tc);
-  const date = prompt("Son Muayene Tarihi:", emp.date);
-  const next = prompt("Sonraki Muayene Tarihi:", emp.next);
-  if (name && tc && date && next) {
-    employees[index] = { name, tc, date, next };
-    localStorage.setItem("employees", JSON.stringify(employees));
-    loadEmployees();
-  }
+function editEmployee(i) {
+  const emp = employees[i];
+  emp.name = prompt("Ad Soyad:", emp.name) || emp.name;
+  emp.tc = prompt("TC Kimlik No:", emp.tc) || emp.tc;
+  emp.lastCheck = prompt("Son Muayene Tarihi (yyyy-aa-gg):", emp.lastCheck) || emp.lastCheck;
+
+  const next = new Date(emp.lastCheck);
+  next.setFullYear(next.getFullYear() + 5);
+  emp.nextCheck = next.toISOString().split("T")[0];
+
+  renderEmployees();
 }
 
-function deleteEmployee(index) {
-  const employees = JSON.parse(localStorage.getItem("employees") || "[]");
+function deleteEmployee(i) {
   if (confirm("Silmek istediğinize emin misiniz?")) {
-    employees.splice(index, 1);
-    localStorage.setItem("employees", JSON.stringify(employees));
-    loadEmployees();
+    employees.splice(i, 1);
+    renderEmployees();
   }
 }
 
-function saveDoctorInfo() {
-  localStorage.setItem("doctorName", document.getElementById("docName").value);
-  localStorage.setItem("doctorDiploma", document.getElementById("docDiploma").value);
-  alert("Doktor bilgileri kaydedildi!");
+function saveSettings() {
+  const doctor = document.getElementById("doctorName").value;
+  const diploma = document.getElementById("diplomaNo").value;
+  alert(`Kaydedildi:\nDoktor: ${doctor}\nDiploma No: ${diploma}`);
 }
