@@ -64,6 +64,19 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js"></script> 
+  <!-- EK-2 Formu Modal -->
+<div id="ek2Modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#00000088; align-items:center; justify-content:center; z-index:1000;">
+  <div style="background:white; padding:20px; border-radius:8px; width:300px;">
+    <h3>EK-2 Muayene Formu</h3>
+    <label>Tarih (gg.aa.yyyy):</label>
+    <input type="text" id="muayeneTarihi" placeholder="gg.aa.yyyy" style="width:100%; margin-bottom:10px;">
+    <div style="text-align:right;">
+      <button onclick="saveEK2()">Kaydet</button>
+      <button onclick="closeEK2()">İptal</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
