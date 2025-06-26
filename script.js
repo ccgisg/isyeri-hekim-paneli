@@ -14,9 +14,10 @@ function login() {
 }
 
 function logout() {
-  localStorage.clear();
-  location.reload();
+  localStorage.removeItem("login"); // sadece oturum bilgisini sil
+  location.reload(); // sayfayı yenile, login ekranı gelsin
 }
+
 
 function loadWorkplaces() {
   const list = document.getElementById("workplaceList");
