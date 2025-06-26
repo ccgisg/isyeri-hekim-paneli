@@ -3,11 +3,12 @@ function login() {
   if (password === "hekim2025") {
     document.getElementById("loginArea").style.display = "none";
     document.getElementById("mainView").style.display = "block";
-    loadWorkplaces(); // varsa işyerlerini yükle
+    // loadWorkplaces();  // ← Bunu yorum satırı yap veya sil
   } else {
     alert("Şifre yanlış!");
   }
 }
+
 function addWorkplace() {
   const name = prompt("İşyeri adı:");
   if (name) {
