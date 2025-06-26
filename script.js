@@ -1,4 +1,13 @@
-
+function login() {
+  const password = document.getElementById("password").value;
+  if (password === "hekim2025") {
+    document.getElementById("loginArea").style.display = "none";
+    document.getElementById("mainView").style.display = "block";
+    loadWorkplaces(); // varsa işyerlerini yükle
+  } else {
+    alert("Şifre yanlış!");
+  }
+}
 function addWorkplace() {
   const name = prompt("İşyeri adı:");
   if (name) {
