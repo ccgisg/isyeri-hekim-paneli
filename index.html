@@ -7,7 +7,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="mainView">
+
+  <!-- Giriş Alanı -->
+  <div id="loginArea">
+    <h2>🔒 Giriş</h2>
+    <input type="password" id="password" placeholder="Şifre giriniz" />
+    <button onclick="login()">Giriş Yap</button>
+  </div>
+
+  <!-- Ana Görünüm -->
+  <div id="mainView" style="display:none;">
     <h2>🏢 İş Yerlerim</h2>
     <ul id="workplaceList"></ul>
     <button onclick="addWorkplace()">+ Yeni İş Yeri Ekle</button>
@@ -19,6 +28,7 @@
     <button onclick="saveDoctorInfo()">Kaydet</button>
   </div>
 
+  <!-- İş Yeri Detay Görünümü -->
   <div id="workplaceView" style="display:none;">
     <button onclick="goBack()">← Geri</button>
     <h2 id="currentWorkplaceTitle">İşyeri Adı</h2>
