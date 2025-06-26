@@ -1,1 +1,0 @@
-// script placeholder, kodlar birazdan eklenecek
