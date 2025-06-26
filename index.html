@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>İşyeri Hekim Paneli V2 - IRIS</title>
+  <script src="script.js"></script>
+</head>
+<body>
+  <h2>🔒 Giriş</h2>
+  <input type="password" id="password" placeholder="Şifre giriniz" />
+  <button onclick="login()">Giriş Yap</button>
+
+  <div id="panel" style="display:none;">
+    <h3>🏢 İş Yerlerim</h3>
+    <ul id="workplaceList"></ul>
+    <button onclick="addWorkplace()">+ Yeni İş Yeri Ekle</button>
+
+    <h3>👥 Çalışanlar</h3>
+    <button onclick="addEmployee()">+ Çalışan Ekle</button>
+    <table border="1" id="employeeTable">
+      <thead>
+        <tr>
+          <th>Ad Soyad</th>
+          <th>TC</th>
+          <th>Son Muayene</th>
+          <th>Sonraki Muayene</th>
+          <th>Düzenle</th>
+          <th>Sil</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>⚙️ Ayarlar</h3>
+    <input id="docName" placeholder="Doktor Ad Soyad" />
+    <input id="docDiploma" placeholder="Diploma No" />
+    <button onclick="saveDoctorInfo()">Kaydet</button>
+  </div>
+</body>
+</html>
