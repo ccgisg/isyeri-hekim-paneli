@@ -1,3 +1,13 @@
+function login() {
+  const password = document.getElementById("password").value;
+  if (password === "hekim2025") {
+    document.getElementById("loginArea").style.display = "none";
+    document.getElementById("mainView").style.display = "block";
+    loadWorkplaces();
+  } else {
+    alert("Şifre yanlış!");
+  }
+}
 
 let employeeData = {};
 let currentWorkplace = "";
