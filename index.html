@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>İşyeri Hekim Paneli V7 - IRIS</title>
+  <title>İşyeri Hekim Paneli V8 - IRIS</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -61,7 +61,7 @@
       <span class="close" onclick="closeEK2()">&times;</span>
       <h3>📋 EK-2 Formu</h3>
       <label>Muayene Tarihi: <input id="muayeneTarihi" maxlength="10" placeholder="gg.aa.yyyy"></label><br><br>
-      <button onclick="saveEK2()">EK-2 Kaydet ve Oluştur</button>
+      <button onclick="saveEK2()">EK-2 Kaydet ve İndir</button>
     </div>
   </div>
 
@@ -71,7 +71,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pizzip-utils/3.1.5/pizzip-utils.min.js"></script>
   <script>
-    // PizZipUtils global düzeyde fetchBinaryContent fonksiyonu sunmazsa tanımlıyoruz
     if (typeof window !== "undefined" && !window.PizZipUtils) {
       window.PizZipUtils = {
         getBinaryContent: function (url, callback) {
