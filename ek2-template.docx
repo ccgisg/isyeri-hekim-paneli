@@ -1,0 +1,9 @@
+EK-2 PERİYODİK MUAYENE FORMU
+
+Adı Soyadı: {{adsoyad}}  
+TC Kimlik No: {{tc}}  
+Çalıştığı İş Yeri: {{isyeri}}  
+Muayene Tarihi: {{tarih}}  
+
+Muayeneyi Yapan Hekim: {{doktor}}  
+Diploma No: {{diploma}}  
