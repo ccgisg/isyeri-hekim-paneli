@@ -15,6 +15,11 @@ function logout() {
 
 let workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
 let currentWorkplace = null;
+let selectedEmployeeIndex = null;
+
+function saveData() {
+  localStorage.setItem("workplaces", JSON.stringify(workplaces));
+}
 
 function loadWorkplaces() {
   const list = document.getElementById("workplaceList");
@@ -22,8 +27,8 @@ function loadWorkplaces() {
   workplaces.forEach((wp, index) => {
     const li = document.createElement("li");
     li.textContent = wp.name;
-    li.style.cursor = "pointer";
     li.ondblclick = () => openWorkplace(index);
+    li.style.cursor = "pointer";
     list.appendChild(li);
   });
 }
@@ -86,13 +91,11 @@ function loadEmployees() {
     row.insertCell().innerText = emp.sonMuayene || "";
     row.insertCell().innerText = emp.sonrakiMuayene || "";
 
-    const editCell = row.insertCell();
     const editBtn = document.createElement("button");
     editBtn.textContent = "Düzenle";
     editBtn.onclick = () => editEmployee(idx);
-    editCell.appendChild(editBtn);
+    row.insertCell().appendChild(editBtn);
 
-    const delCell = row.insertCell();
     const delBtn = document.createElement("button");
     delBtn.textContent = "Sil";
     delBtn.onclick = () => {
@@ -102,7 +105,7 @@ function loadEmployees() {
         loadEmployees();
       }
     };
-    delCell.appendChild(delBtn);
+    row.insertCell().appendChild(delBtn);
 
     row.ondblclick = () => openEK2(idx);
     row.style.cursor = "pointer";
@@ -136,8 +139,6 @@ function editEmployee(index) {
   }
 }
 
-let selectedEmployeeIndex = null;
-
 function openEK2(index) {
   selectedEmployeeIndex = index;
   document.getElementById("muayeneTarihi").value = "";
@@ -164,9 +165,10 @@ function saveEK2() {
   const nextDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
   nextDate.setFullYear(nextDate.getFullYear() + 5);
 
-  const formattedNext = String(nextDate.getDate()).padStart(2, "0") + "." +
-                        String(nextDate.getMonth() + 1).padStart(2, "0") + "." +
-                        nextDate.getFullYear();
+  const formattedNext =
+    String(nextDate.getDate()).padStart(2, "0") + "." +
+    String(nextDate.getMonth() + 1).padStart(2, "0") + "." +
+    nextDate.getFullYear();
 
   emp.sonrakiMuayene = formattedNext;
 
@@ -175,14 +177,7 @@ function saveEK2() {
   closeEK2();
 }
 
-function exportToExcel() {
-  alert("Excel'e Aktar özelliği geliştiriliyor.");
-}
-
-function importFromExcel(event) {
-  alert("Excel'den Al özelliği geliştiriliyor.");
-}
-
+// Otomatik nokta ekleme
 document.addEventListener("input", function (e) {
   if (e.target.id === "muayeneTarihi") {
     let v = e.target.value.replace(/\D/g, "");
@@ -192,7 +187,10 @@ document.addEventListener("input", function (e) {
   }
 });
 
-function saveData() {
-  localStorage.setItem("workplaces", JSON.stringify(workplaces));
+function exportToExcel() {
+  alert("Excel'e aktarım özelliği henüz aktif değil.");
 }
 
+function importFromExcel(event) {
+  alert("Excel'den alma özelliği henüz aktif değil.");
+}
