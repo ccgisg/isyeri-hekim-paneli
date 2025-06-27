@@ -1,1 +1,0 @@
-// Placeholder JS (tam fonksiyonel sürüm yukarıda anlatıldı)
