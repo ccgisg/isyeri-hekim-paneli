@@ -1,4 +1,3 @@
-// Giriş işlemi
 function login() {
   const password = document.getElementById("password").value;
   if (password === "hekim2025") {
@@ -10,23 +9,25 @@ function login() {
   }
 }
 
-// Logout işlemi
 function logout() {
-  location.reload(); // sadece ekranı yeniler
+  document.getElementById("mainView").style.display = "none";
+  document.getElementById("loginArea").style.display = "block";
 }
 
-// Veri yapısı
 let workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
 let currentWorkplace = null;
+let selectedEmployeeIndex = null;
 
-// İş yeri işlemleri
+function saveData() {
+  localStorage.setItem("workplaces", JSON.stringify(workplaces));
+}
+
 function loadWorkplaces() {
   const list = document.getElementById("workplaceList");
   list.innerHTML = "";
   workplaces.forEach((wp, index) => {
     const li = document.createElement("li");
     li.textContent = wp.name;
-    li.style.cursor = "pointer";
     li.ondblclick = () => openWorkplace(index);
     list.appendChild(li);
   });
@@ -42,10 +43,9 @@ function addWorkplace() {
 }
 
 function editWorkplace() {
-  const names = workplaces.map(wp => wp.name).join("\n");
+  const names = workplaces.map(w => w.name).join("\n");
   const oldName = prompt("Düzenlenecek işyeri adı:\n" + names);
   if (!oldName) return;
-
   const wp = workplaces.find(w => w.name === oldName);
   if (wp) {
     const newName = prompt("Yeni adı:", wp.name);
@@ -54,8 +54,6 @@ function editWorkplace() {
       saveData();
       loadWorkplaces();
     }
-  } else {
-    alert("İşyeri bulunamadı.");
   }
 }
 
@@ -72,19 +70,18 @@ function goBack() {
   document.getElementById("mainView").style.display = "block";
 }
 
-// Doktor bilgisi
 function saveDoctorInfo() {
-  const docName = document.getElementById("docName").value;
-  const docDiploma = document.getElementById("docDiploma").value;
-  localStorage.setItem("doctorInfo", JSON.stringify({ docName, docDiploma }));
-  alert("Doktor bilgisi kaydedildi.");
+  const name = document.getElementById("docName").value;
+  const diploma = document.getElementById("docDiploma").value;
+  localStorage.setItem("doctorInfo", JSON.stringify({ name, diploma }));
+  alert("Doktor bilgileri kaydedildi.");
 }
 
-// Çalışan işlemleri
 function loadEmployees() {
   const tbody = document.querySelector("#employeeTable tbody");
   tbody.innerHTML = "";
   const employees = workplaces[currentWorkplace].employees;
+
   employees.forEach((emp, idx) => {
     const row = tbody.insertRow();
     row.insertCell().innerText = emp.name;
@@ -92,23 +89,21 @@ function loadEmployees() {
     row.insertCell().innerText = emp.sonMuayene || "";
     row.insertCell().innerText = emp.sonrakiMuayene || "";
 
-    const editCell = row.insertCell();
     const editBtn = document.createElement("button");
     editBtn.textContent = "Düzenle";
     editBtn.onclick = () => editEmployee(idx);
-    editCell.appendChild(editBtn);
+    row.insertCell().appendChild(editBtn);
 
-    const delCell = row.insertCell();
     const delBtn = document.createElement("button");
     delBtn.textContent = "Sil";
     delBtn.onclick = () => {
-      if (confirm("Silinsin mi?")) {
+      if (confirm("Silmek istiyor musunuz?")) {
         employees.splice(idx, 1);
         saveData();
         loadEmployees();
       }
     };
-    delCell.appendChild(delBtn);
+    row.insertCell().appendChild(delBtn);
 
     row.ondblclick = () => openEK2(idx);
     row.style.cursor = "pointer";
@@ -120,8 +115,7 @@ function addEmployee() {
   const tc = prompt("TC Kimlik No:");
   if (name && tc) {
     workplaces[currentWorkplace].employees.push({
-      name,
-      tc,
+      name, tc,
       sonMuayene: "",
       sonrakiMuayene: ""
     });
@@ -130,8 +124,8 @@ function addEmployee() {
   }
 }
 
-function editEmployee(index) {
-  const emp = workplaces[currentWorkplace].employees[index];
+function editEmployee(idx) {
+  const emp = workplaces[currentWorkplace].employees[idx];
   const name = prompt("Ad Soyad:", emp.name);
   const tc = prompt("TC Kimlik No:", emp.tc);
   if (name && tc) {
@@ -142,9 +136,6 @@ function editEmployee(index) {
   }
 }
 
-// EK-2 işlemleri
-let selectedEmployeeIndex = null;
-
 function openEK2(index) {
   selectedEmployeeIndex = index;
   document.getElementById("muayeneTarihi").value = "";
@@ -153,42 +144,30 @@ function openEK2(index) {
 
 function closeEK2() {
   document.getElementById("ek2Modal").style.display = "none";
-  selectedEmployeeIndex = null;
 }
 
 function saveEK2() {
-  const dateInput = document.getElementById("muayeneTarihi").value;
-  const valid = /^\d{2}\.\d{2}\.\d{4}$/.test(dateInput);
-  if (!valid) {
-    alert("Tarih biçimi hatalı. gg.aa.yyyy olmalı.");
+  const dateStr = document.getElementById("muayeneTarihi").value;
+  if (!/^\d{2}\.\d{2}\.\d{4}$/.test(dateStr)) {
+    alert("Tarih formatı yanlış. gg.aa.yyyy olmalı.");
     return;
   }
 
   const emp = workplaces[currentWorkplace].employees[selectedEmployeeIndex];
-  emp.sonMuayene = dateInput;
+  emp.sonMuayene = dateStr;
 
-  const parts = dateInput.split(".");
-  const nextDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-  nextDate.setFullYear(nextDate.getFullYear() + 5);
-
-  const formattedNext = String(nextDate.getDate()).padStart(2, "0") + "." +
-                        String(nextDate.getMonth() + 1).padStart(2, "0") + "." +
-                        nextDate.getFullYear();
-
-  emp.sonrakiMuayene = formattedNext;
+  const [gg, aa, yyyy] = dateStr.split(".");
+  const next = new Date(`${yyyy}-${aa}-${gg}`);
+  next.setFullYear(next.getFullYear() + 5);
+  const formatted =
+    String(next.getDate()).padStart(2, "0") + "." +
+    String(next.getMonth() + 1).padStart(2, "0") + "." +
+    next.getFullYear();
+  emp.sonrakiMuayene = formatted;
 
   saveData();
   loadEmployees();
   closeEK2();
-}
-
-// Excel işlemleri (yer tutucu, fonksiyonel hale getirilebilir)
-function exportToExcel() {
-  alert("Excel'e Aktar özelliği geliştiriliyor.");
-}
-
-function importFromExcel(event) {
-  alert("Excel'den Al özelliği geliştiriliyor.");
 }
 
 // Otomatik tarih nokta ekleme
@@ -201,7 +180,10 @@ document.addEventListener("input", function (e) {
   }
 });
 
-// Kaydetme işlemi
-function saveData() {
-  localStorage.setItem("workplaces", JSON.stringify(workplaces));
+// Placeholder: Excel işlemleri
+function exportToExcel() {
+  alert("Excel'e Aktar özelliği geliştiriliyor.");
+}
+function importFromExcel(event) {
+  alert("Excel'den Al özelliği geliştiriliyor.");
 }
