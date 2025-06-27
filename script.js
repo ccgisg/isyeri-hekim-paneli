@@ -1,5 +1,3 @@
-// script.js
-
 // Giriş işlemi
 function login() {
   const password = document.getElementById("password").value;
@@ -12,18 +10,16 @@ function login() {
   }
 }
 
+// Logout işlemi
 function logout() {
   location.reload();
 }
 
+// Veri yapısı
 let workplaces = JSON.parse(localStorage.getItem("workplaces") || "[]");
 let currentWorkplace = null;
-let selectedEmployeeIndex = null;
 
-function saveData() {
-  localStorage.setItem("workplaces", JSON.stringify(workplaces));
-}
-
+// İş yeri işlemleri
 function loadWorkplaces() {
   const list = document.getElementById("workplaceList");
   list.innerHTML = "";
@@ -46,10 +42,13 @@ function addWorkplace() {
 }
 
 function editWorkplace() {
-  const oldName = prompt("Düzenlenecek işyeri adı:");
+  const names = workplaces.map(wp => wp.name).join("\n");
+  const oldName = prompt("Düzenlenecek işyeri adı:\n" + names);
+  if (!oldName) return;
+
   const wp = workplaces.find(w => w.name === oldName);
   if (wp) {
-    const newName = prompt("Yeni işyeri adı:", wp.name);
+    const newName = prompt("Yeni adı:", wp.name);
     if (newName) {
       wp.name = newName;
       saveData();
@@ -73,6 +72,7 @@ function goBack() {
   document.getElementById("mainView").style.display = "block";
 }
 
+// Doktor bilgisi
 function saveDoctorInfo() {
   const docName = document.getElementById("docName").value;
   const docDiploma = document.getElementById("docDiploma").value;
@@ -80,6 +80,7 @@ function saveDoctorInfo() {
   alert("Doktor bilgisi kaydedildi.");
 }
 
+// Çalışan işlemleri
 function loadEmployees() {
   const tbody = document.querySelector("#employeeTable tbody");
   tbody.innerHTML = "";
@@ -98,12 +99,11 @@ function loadEmployees() {
     ek2Btn.onclick = () => openEK2(idx);
     ek2Cell.appendChild(ek2Btn);
 
-    // Dosya Yükle butonu
+    // Dosya butonu (placeholder)
     const fileCell = row.insertCell();
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = ".pdf,.jpg,.jpeg,.tif,.tiff";
-    fileInput.onchange = (e) => alert("Dosya yüklendi: " + e.target.files[0].name);
     fileCell.appendChild(fileInput);
 
     const editCell = row.insertCell();
@@ -124,7 +124,7 @@ function loadEmployees() {
     };
     delCell.appendChild(delBtn);
 
-    row.ondblclick = () => viewEK2History(idx);
+    row.ondblclick = () => showEK2History(idx);
     row.style.cursor = "pointer";
   });
 }
@@ -138,7 +138,7 @@ function addEmployee() {
       tc,
       sonMuayene: "",
       sonrakiMuayene: "",
-      ek2History: []
+      ek2Gecmis: []
     });
     saveData();
     loadEmployees();
@@ -157,14 +157,16 @@ function editEmployee(index) {
   }
 }
 
+let selectedEmployeeIndex = null;
+
 function openEK2(index) {
   selectedEmployeeIndex = index;
   const today = new Date();
-  const todayStr = String(today.getDate()).padStart(2, '0') + '.' +
-                   String(today.getMonth() + 1).padStart(2, '0') + '.' +
-                   today.getFullYear();
-  document.getElementById("muayeneTarihi").value = todayStr;
-  document.getElementById("ek2Modal").style.display = "block";
+  const formatted = String(today.getDate()).padStart(2, '0') + "." +
+                    String(today.getMonth()+1).padStart(2, '0') + "." +
+                    today.getFullYear();
+  document.getElementById("muayeneTarihi").value = formatted;
+  document.getElementById("ek2Modal").style.display = "flex";
 }
 
 function closeEK2() {
@@ -173,37 +175,39 @@ function closeEK2() {
 }
 
 function saveEK2() {
-  const tarih = document.getElementById("muayeneTarihi").value;
-  const valid = /^\d{2}\.\d{2}\.\d{4}$/.test(tarih);
+  const dateInput = document.getElementById("muayeneTarihi").value;
+  const valid = /^\d{2}\.\d{2}\.\d{4}$/.test(dateInput);
   if (!valid) {
     alert("Tarih biçimi hatalı. gg.aa.yyyy olmalı.");
     return;
   }
+
   const emp = workplaces[currentWorkplace].employees[selectedEmployeeIndex];
-  emp.sonMuayene = tarih;
+  if (!emp.ek2Gecmis) emp.ek2Gecmis = [];
+  emp.ek2Gecmis.push(dateInput);
+  emp.sonMuayene = dateInput;
 
-  const parts = tarih.split(".");
-  const date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-  date.setFullYear(date.getFullYear() + 5);
-  const next = `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
+  const parts = dateInput.split(".");
+  const nextDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+  nextDate.setFullYear(nextDate.getFullYear() + 5);
 
-  emp.sonrakiMuayene = next;
-  emp.ek2History = emp.ek2History || [];
-  emp.ek2History.push(tarih);
+  const formattedNext = String(nextDate.getDate()).padStart(2, "0") + "." +
+                        String(nextDate.getMonth() + 1).padStart(2, "0") + "." +
+                        nextDate.getFullYear();
+  emp.sonrakiMuayene = formattedNext;
 
   saveData();
   loadEmployees();
   closeEK2();
 }
 
-function viewEK2History(index) {
+function showEK2History(index) {
   const emp = workplaces[currentWorkplace].employees[index];
-  if (emp.ek2History && emp.ek2History.length > 0) {
-    alert("EK-2 Geçmişi:\n" + emp.ek2History.join("\n"));
-  } else {
-    alert("EK-2 kaydı yok.");
-  }
+  const history = emp.ek2Gecmis?.join("\n") || "Kayıt yok.";
+  alert("EK-2 Geçmiş:\n" + history);
 }
+
+// Otomatik tarih nokta ekleme
 
 document.addEventListener("input", function (e) {
   if (e.target.id === "muayeneTarihi") {
@@ -213,3 +217,7 @@ document.addEventListener("input", function (e) {
     e.target.value = v;
   }
 });
+
+function saveData() {
+  localStorage.setItem("workplaces", JSON.stringify(workplaces));
+}
