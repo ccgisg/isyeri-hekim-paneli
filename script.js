@@ -1,0 +1,1 @@
+// Tamamlanmış JavaScript kodu ayrı olarak eklenecek.
