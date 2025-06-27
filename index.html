@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>İşyeri Hekim Paneli V7 - IRIS</title>
+  <title>İşyeri Hekim Paneli V8 - IRIS</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -56,16 +56,23 @@
     </table>
   </div>
 
-  <!-- EK-2 Modal -->
-  <div id="ek2Modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#00000088; align-items:center; justify-content:center; z-index:1000;">
-    <div style="background:white; padding:20px; border-radius:8px; width:300px;">
+  <!-- EK-2 Formu -->
+  <div id="ek2Modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeEK2()">&times;</span>
       <h3>📋 EK-2 Formu</h3>
-      <label>Muayene Tarihi (gg.aa.yyyy):</label>
-      <input type="text" id="muayeneTarihi" placeholder="gg.aa.yyyy" maxlength="10" style="width:100%; margin-bottom:10px;">
-      <div style="text-align:right;">
-        <button onclick="saveEK2()">EK-2 Kaydet</button>
-        <button onclick="closeEK2()">İptal</button>
-      </div>
+      <label>Muayene Tarihi:</label>
+      <input id="muayeneTarihi" maxlength="10" placeholder="gg.aa.yyyy" /><br><br>
+      <button onclick="saveEK2()">EK-2 Kaydet</button>
+    </div>
+  </div>
+
+  <!-- EK-2 Geçmiş Kayıtları Modal -->
+  <div id="ek2HistoryModal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeEK2History()">&times;</span>
+      <h3>📜 EK-2 Geçmişi</h3>
+      <ul id="ek2HistoryList"></ul>
     </div>
   </div>
 
