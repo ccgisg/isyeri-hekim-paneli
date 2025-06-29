@@ -2,23 +2,80 @@ body {
   font-family: Arial, sans-serif;
   margin: 20px;
 }
+
 button {
   margin: 4px;
+  padding: 6px 12px;
   cursor: pointer;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
-#ek2Modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+
+button:hover {
+  background-color: #d0d0d0;
 }
+
+input[type="text"],
+input[type="password"],
+input[type="file"] {
+  margin: 5px 0;
+  padding: 6px;
+  width: 300px;
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+}
+
+table, th, td {
+  border: 1px solid #aaa;
+}
+
+th, td {
+  padding: 6px 8px;
+  text-align: left;
+}
+
+tr:hover {
+  background-color: #f2f2f2;
+}
+
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
   width: 300px;
+  text-align: left;
+}
+
+#ek2Modal,
+#historyModal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.close {
+  float: right;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li:hover {
+  background-color: #eee;
 }
