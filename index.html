@@ -2,16 +2,18 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>İşyeri Hekim Paneli</title>
+  <title>IRIS Panel - İş Yeri Hekimliği</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Giriş -->
   <div id="loginArea">
     <h2>🔒 Giriş</h2>
     <input type="password" id="password" placeholder="Şifre giriniz" />
     <button onclick="login()">Giriş Yap</button>
   </div>
 
+  <!-- Ana Sayfa -->
   <div id="mainView" style="display:none;">
     <h2>🏢 İş Yerlerim</h2>
     <ul id="workplaceList"></ul>
@@ -25,6 +27,7 @@
     <button onclick="saveDoctorInfo()">Kaydet</button>
   </div>
 
+  <!-- İş Yeri Sayfası -->
   <div id="workplaceView" style="display:none;">
     <button onclick="goBack()">← Geri</button>
     <h2 id="currentWorkplaceTitle">İşyeri Adı</h2>
@@ -36,6 +39,8 @@
 
     <h3>👥 Çalışanlar</h3>
     <button onclick="addEmployee()">+ Çalışan Ekle</button>
+    <button onclick="exportToExcel()">⬇️ Excel'e Aktar</button>
+    <input type="file" accept=".xlsx" onchange="importFromExcel(event)">
     <table border="1" id="employeeTable">
       <thead>
         <tr>
@@ -45,6 +50,7 @@
           <th>Son Muayene</th>
           <th>Sonraki Muayene</th>
           <th>EK-2</th>
+          <th>Dosya</th>
           <th>Düzenle</th>
           <th>Sil</th>
         </tr>
@@ -53,12 +59,22 @@
     </table>
   </div>
 
+  <!-- EK-2 Modal -->
   <div id="ek2Modal" style="display:none;">
     <div class="modal-content">
       <span class="close" onclick="closeEK2()">&times;</span>
       <h3>📋 EK-2 Formu</h3>
       <label>Muayene Tarihi: <input id="muayeneTarihi" maxlength="10" placeholder="gg.aa.yyyy"></label><br><br>
-      <button onclick="saveEK2()">EK-2 Kaydet</button>
+      <button onclick="saveEK2()">EK-2 Kaydet ve İndir</button>
+    </div>
+  </div>
+
+  <!-- EK-2 Geçmiş Modal -->
+  <div id="historyModal" style="display:none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeHistory()">&times;</span>
+      <h3>📜 EK-2 Geçmişi</h3>
+      <ul id="ek2HistoryList"></ul>
     </div>
   </div>
 
